@@ -1,0 +1,12 @@
+/* changing the width of the Modal for the help Modal. */
+#modal-help-dialog,
+#modal-help-content {
+    width: 90%;
+    margin: 30px auto;
+
+}
+
+#modal-help-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}

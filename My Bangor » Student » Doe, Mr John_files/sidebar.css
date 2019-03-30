@@ -1,0 +1,36 @@
+.sidebar {
+    padding: 1em 1.5em 1.5em;
+    margin-bottom: 1em;
+}
+.sidebar .title {
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 100% 12px;
+    background-image: url("../../roundhouse/img/bg/border-blue.svg");
+    padding-bottom: 10px;
+    display: inline-block;
+}
+.sidebar .nav-stacked {
+    margin-top: 1.5em;
+}
+.sidebar .nav-stacked > li {
+    font-size: 1.5rem;
+    font-style: italic;
+}
+.sidebar .nav-stacked > li > a {
+    color: white;
+    background-color: rgb(3, 143, 178);
+    padding: 7px 0 8px;
+    border-radius: 0;
+    border-top: 1px dotted white;
+}
+.sidebar .nav-stacked > li:first-child > a {
+    border-top: 0 none;
+}
+.sidebar .nav-stacked > li.active > a,
+.sidebar .nav-stacked > li > a:hover,
+.sidebar .nav-stacked > li > a:focus {
+    color: black;
+    background-color: rgb(3, 143, 178);
+    text-decoration: none;
+}

@@ -1,0 +1,173 @@
+function ajax_load(target, new_href, call_back){
+    $(target).html('');
+    $(target).loadingOverlay();
+    $(target).load(new_href, function(response, status, xhr) {
+        // Store href and http return code in tab pane for checking next time
+        $(this).attr('data-status', xhr.status);
+        $(this).attr('data-href', new_href);
+
+        if ($('#id_password', response).length > 0 || $('#password', response).length > 0) {
+            window.location.replace(LOGIN_URL + '?next=' + window.location.pathname + window.location.hash);
+            return false;
+        }
+        if (status === "error") {
+            var err_div = document.createElement('div');
+            $(err_div).addClass('alert');
+            $(err_div).addClass('alert-danger');
+            if (xhr.status === 403) {
+                $(err_div).append('<b>Permission Denied</b>');
+            } else if (xhr.status === 404) {
+                $(err_div).append('<b>Content not found</b>');
+            } else if (xhr.status === 0) {
+                window.location.replace(LOGIN_URL + '?next=' + window.location.pathname + window.location.hash);
+                return false;
+            } else {
+                $(err_div).append('<b>Sorry, but there was an error.</b>');
+            }
+            $(target).html(err_div);
+        } else {
+            $(this).parents('.tab-content:first').tab(); //reinitialize tabs if thats what we have
+            // Init any bootstrapTable tables that may have just been loaded
+            if ( $(this).find('[data-toggle="table"]').length ) {
+                $(this).find('[data-toggle="table"]').bootstrapTable();
+            }
+        }
+
+        if (typeof call_back === "function") {
+            call_back();
+        }
+    });
+}
+
+$(function() {
+    // Load ajax tabs.
+    // if a tab has a data-href attr it is an ajax tab load the content by ajax
+    // hashable tabs use the hash change to update content
+    $('body').on('click', '.nav a[data-toggle="tab"]', function(e) {
+        e.preventDefault();
+        //this is a ajax tab situation
+        if ($(this).parents('.nav:first').hasClass('hashable')) {
+            //hasable for back forward tabbing
+            if($(this).attr('data-href')) {
+                location.hash = '#'+$(this).attr('data-href');
+            }
+            else{
+                location.hash = $(this).attr('href');
+            }
+        }
+        else{
+            // just a standard ajax tab simply load it
+            var tab_pane = $(e.target).attr('href');
+            var new_href = $(e.target).attr('data-href');
+            if($(this).attr('data-href')) {
+                if(!($(e.target).hasClass('cached_tab') && $(tab_pane).attr('data-status') == '200')){
+                    ajax_load(tab_pane, new_href);
+                }
+            }
+        }
+    });
+
+
+    $('body').on('show.bs.collapse', '.collapse[data-href]', function(e){
+        var target = $(e.target).children(":first");
+        var href = $(e.target).data('href');
+        if (typeof href != 'undefined') {
+            ajax_load(target, href);
+        }
+    });
+
+
+    $(window).bind('hashchange', function (e) {
+        var new_href = window.location.hash.replace('#','');
+
+        //If no hash just load the url location
+        if (new_href == "") {
+            location.reload();
+            return;
+        }
+
+        //hashed url is one of 2 things a hashable tab for back and forward working within tabs
+        //or a hashable url to be loaded into a '.hashable' div
+        //YOU CANNOT HAVE BOTH IN ONE PAGE
+
+        //firstly it may be a hashable tabs witin the base url page
+        //check this by comparing the hashed url to any the data-href
+        //atttribute of any tabs with the 'hashable' class
+        menu_tabs = $('.nav.hashable a[data-href]');
+        $.each(menu_tabs, function(key, menu_a) {
+            $( $(menu_a).attr('href') ).fadeOut();
+            if (new_href.match("^"+$(menu_a).attr('data-href'))) {
+                tab_pane = $(menu_a).attr('href');
+                last_href = $(tab_pane).attr('data-href');
+                last_status = $(tab_pane).attr('data-status');
+
+                if (last_status != '200' || new_href != last_href) {
+                    ajax_load(tab_pane, new_href);
+                    // The following 'show' may not be needed when hashchange is triggered by
+                    // click in .nav-tabs but it is done here for first-time loading of the page.
+                    $(menu_a).tab('show');
+                }
+                $(tab_pane).fadeIn();
+                return false;
+            }
+        });
+
+        //now lets try hashable non ajax tabs, if we have a match on that show that tab
+        var non_ajax_tab = $('.nav.hashable a[href="#' + new_href + '"]');
+        if(non_ajax_tab.length > 0){
+            $(non_ajax_tab).tab('show');
+            return false;
+        }
+
+        //if not then we will simply load the url into the first 'hashable' class element we find
+        var target = $('.hashable:first');
+        ajax_load(target, new_href);
+        return false;
+    });
+
+    if (location.hash) {
+        $(window).trigger('hashchange');
+    }
+
+    $(document).ajaxStop(function(){
+        $(this).loadingOverlay('remove');
+    });
+
+    $( document ).ajaxComplete(function( event, request, settings ) {
+        $( "form" ).updatePolyfill();
+    });
+
+    $('body').on('djselectablesearch', '.ui-autocomplete-input', function(e) {
+        $(this).addClass('ui-autocomplete-searching');
+    });
+    $('body').on('djselectableresponse', '.ui-autocomplete-input', function(e) {
+        $(this).removeClass('ui-autocomplete-searching');
+    });
+
+});
+
+function process_ajax_error_response(xhr, next){
+    /* usage
+     * Ajax views should be protected with the login_required_ajax decorator
+     * $.get(url,function(response, status, xhr){
+            do soemthing for success
+        }).fail(function(xhr){
+            var err_div = process_ajax_error_response(xhr, window.location.pathname);
+            do something with returned error div if not redirected to login
+        });
+     */
+    var err_div = document.createElement('div');
+    $(err_div).addClass('alert');
+    $(err_div).addClass('alert-danger');
+    if (xhr.status == 403) {
+        $(err_div).append('<b>Permission Denied</b>');
+    } else if (xhr.status == 404) {
+        $(err_div).append('<b>Content not found</b>');
+    } else if (xhr.status == 401 ) {
+        window.location.replace(LOGIN_URL+'?next='+next);
+        return false;
+    } else {
+        $(err_div).append('<b>Sorry, but there was an error.</b>');
+    }
+    return err_div;
+}

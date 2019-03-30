@@ -1,0 +1,163 @@
+.navbar-static-top {
+    background-image: none;
+    max-width: 100%;
+    min-height: inherit;
+    margin-bottom: 0;
+    border: none;
+}
+.navbar-static-top > ul {
+    margin-bottom: 0;
+    font-size: 85%;
+}
+#navbar-mybangor {
+    padding-bottom: 20px;
+}
+#navbar-mybangor .container {
+    width: 95%;
+}
+#navbar-mybangor .navbar-brand {
+    padding: 0;
+    margin-right: 10px;
+}
+#navbar-mybangor .navbar-brand img {
+    width: 100%;
+}
+#navbar-mybangor .navbar-toggle > span {
+    display: inline-block;
+}
+#navbar-mybangor .navbar-collapse .nav > li > a {
+    text-shadow: none;
+    transition: none;
+}
+#navbar-mybangor .yamm-content .title {
+    font-family: 'varlyregular', sans-serif;
+    letter-spacing: -0.05em;
+    text-transform: none;
+    margin: 0 2.85% 10px 0;
+    font-size: 6rem;
+    line-height: 1em;
+    display: block;
+    padding: 0;
+}
+@media screen and (min-width: 768px) {
+    #navbar-mybangor .navbar-brand {
+        width: 121px;
+        height: 34px;
+    }
+    #navbar-mybangor .navbar-collapse > ul > li > a {
+        font-size: 10px;
+        padding: 5px;
+        margin-top: 1px;
+    }
+}
+@media screen and (min-width: 850px) {
+    #navbar-mybangor .navbar-brand {
+        width: 131px;
+        height: 37px;
+    }
+    #navbar-mybangor .navbar-collapse> ul > li > a {
+        font-size: 11px;
+        margin-top: 1px;
+    }
+}
+@media screen and (min-width: 950px) {
+    #navbar-mybangor .navbar-brand {
+        width: 149px;
+        height: 42px;
+    }
+    #navbar-mybangor .navbar-collapse > ul > li > a {
+        font-size: 12px;
+        margin-top: 4px;
+    }
+}
+@media screen and (min-width: 1050px) {
+    #navbar-mybangor .navbar-brand {
+        width: 181px;
+        height: 51px;
+    }
+    #navbar-mybangor .navbar-collapse > ul > li > a {
+        font-size: 14px;
+        margin-top: 8px;
+    }
+}
+footer {
+    padding-top: 35px;
+    min-height: 130px;
+}
+footer ul li {
+    font-size: 14px;
+}
+footer ul li a {
+    color: white;
+    text-decoration: underline;
+}
+footer,
+#header a,
+.navbar-static-top,
+#navbar-mybangor .navbar-collapse .nav > li > a {
+    color: white;
+    background-color: rgb(44, 40, 35)
+}
+
+/* Deal with UL in YAMM on phones */
+@media (max-width: 767px) {
+    #navbar-mybangor .yamm-content {
+        padding: 0 15px;
+    }
+    #navbar-mybangor .yamm-content ul {
+        margin-bottom: 10px
+    }
+    #navbar-mybangor .yamm-content li p {
+        font-weight: bold;
+    }
+    #navbar-mybangor .yamm-content li a {
+        color: white;
+        text-decoration: underline;
+        padding: 2px;
+    }
+}
+/* Only change link style on wider menus */
+@media (min-width: 768px) {
+    #navbar-mybangor .navbar-collapse .nav .dropdown-menu {
+        top: inherit;
+        border: white;
+    }
+    #navbar-mybangor .navbar-collapse .nav > li > a:hover {
+        color: white;
+        background-color: rgb(3, 143, 178);
+    }
+    #navbar-mybangor .navbar-collapse .nav > li.open > a,
+    #navbar-mybangor .yamm-content .title,
+    #navbar-mybangor .yamm-content li p,
+    #navbar-mybangor .yamm-content li p a {
+        color: rgb(3, 153, 255);
+        background-color: white;
+    }
+    #navbar-mybangor .yamm-content .title a:hover,
+    #navbar-mybangor .yamm-content li p a:hover {
+        color: rgb(255, 70, 70);
+        text-decoration: none;
+    }
+    #navbar-mybangor .yamm-content li a {
+        color: black;
+        border-bottom: 1px solid rgb(0, 153, 255);
+    }
+    #navbar-mybangor .yamm-content li a:hover {
+        color: rgb(0, 153, 255);
+        border-bottom: 1px solid black;
+        text-decoration: none;
+    }
+    #navbar-mybangor .yamm-content li {
+        padding: 6px 0;
+    }
+    #navbar-mybangor .yamm-content li p {
+        font-size: 17px;
+        font-style: italic;
+        font-weight: normal;
+    }
+    #navbar-mybangor .yamm-content li p a,
+    #navbar-mybangor .yamm-content li p a:hover {
+        border-bottom: none;
+        text-decoration: none;
+    }
+}
